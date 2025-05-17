@@ -12,16 +12,24 @@ if uploaded_file is not None:
         # Membaca file Excel
         df = pd.read_excel(uploaded_file)
 
-        # Menampilkan data
-        st.subheader("📊 Data Harga Emas")
-        st.dataframe(df)
-
-        # Pastikan kolom 'Tanggal' dalam datetime & jadikan index
+       # Pastikan kolom 'Tanggal' dalam datetime & jadikan index
         df['Tanggal'] = pd.to_datetime(df['Tanggal'])
         df = df.set_index('Tanggal')
 
-        # # Hitung Moving Average (4 hari)
-        # df['MA4'] = df['Close'].rolling(window=4).mean()
+        # Ambil tanggal minimum dan maksimum dari data
+        min_date = df.index.min().date()
+        max_date = df.index.max().date()
+
+        # Input tanggal awal dan akhir, otomatis dari range data
+        d = st.date_input('Tanggal Awal', value=min_date, min_value=min_date, max_value=max_date)
+        d2 = st.date_input('Tanggal Akhir', value=max_date, min_value=min_date, max_value=max_date)
+
+        # Filter berdasarkan index yang sudah berupa datetime64
+        df = df[(df.index >= pd.to_datetime(d)) & (df.index <= pd.to_datetime(d2))]
+
+        # Menampilkan data
+        st.subheader("📊 Data Harga Emas")
+        st.dataframe(df)
 
         # Buat chart dan simpan sebagai gambar sementara
         st.subheader("📉 Candlestick Chart dengan MA (4 hari)")
@@ -29,8 +37,8 @@ if uploaded_file is not None:
             df,
             type='candle',
             style='starsandstripes',
-            mav=(4),
-            mavcolors=['#FFA500'],
+            mav=(10,21),
+            mavcolors=['#FFA500','#FF0000'],
             ylabel='Harga',
             returnfig=True
             
