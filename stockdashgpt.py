@@ -35,7 +35,7 @@ if uploaded_file is not None:
         st.dataframe(df)
 
         # Buat chart dan simpan sebagai gambar sementara
-        st.subheader("📉 Candlestick Chart dengan MA (4 hari)")
+        st.subheader("📉 Candlestick Chart dengan MA (10,21 hari)")
         fig, axlist = mpf.plot(
             df,
             type='candle',
