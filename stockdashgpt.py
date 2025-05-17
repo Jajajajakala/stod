@@ -20,9 +20,12 @@ if uploaded_file is not None:
         min_date = df.index.min().date()
         max_date = df.index.max().date()
 
-        # Input tanggal awal dan akhir, otomatis dari range data
-        d = st.date_input('Tanggal Awal', value=min_date, min_value=min_date, max_value=max_date)
-        d2 = st.date_input('Tanggal Akhir', value=max_date, min_value=min_date, max_value=max_date)
+        # Tampilkan di sidebar
+        st.sidebar.header("📅 Filter Tanggal")
+
+        # Date input di sidebar
+        d = st.sidebar.date_input("Tanggal awal", value=min_date, min_value=min_date, max_value=max_date)
+        d2 = st.sidebar.date_input("Tanggal akhir", value=max_date, min_value=min_date, max_value=max_date)
 
         # Filter berdasarkan index yang sudah berupa datetime64
         df = df[(df.index >= pd.to_datetime(d)) & (df.index <= pd.to_datetime(d2))]
